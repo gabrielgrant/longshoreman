@@ -44,7 +44,7 @@ class LongShoreMan(object):
         # write config file
         subprocess.call_check(['mkenv', container_id])
 
-    def create_process(command, env)
+    def create_process(self, container_id, command, config)
 
         # open container config file
         # look for runtime file
