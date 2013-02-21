@@ -47,6 +47,7 @@ class LongShoreMan(object):
         for p in config.get('ports', []):
             config['ports'][p] = get_free_port(self._get_allocated_ports())
         # write config file
+        json.dump(open(self._get_container_config_filepath(), 'w'))
         subprocess.call_check(['mkenv', container_id])
 
     def create_process(self, container_id, command, config)
@@ -60,10 +61,13 @@ class LongShoreMan(object):
         return self.processes.keys()
     def list_containers(self):
         return os.listdir(self.containers_dir)
+    def _get_container_config_filepath(self, container_id):
+        container_dir = self._get_container_dir(container_id)
+        return os.path.join(container_dir, 'container.json')
     def get_container_info(self, container_id):
         self._validate_existing_container_id(container_id)
-        config = os.path.join(self._get_container_dir(container_id), 'container.json')
-        return json.load(config)
+        config = self._get_container_config_filepath()
+        return json.load(open(config))
     #def get_container_contents(self, container_id):
     def get_process_info(self, process_id):
         pass
