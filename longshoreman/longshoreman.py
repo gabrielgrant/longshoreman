@@ -51,7 +51,7 @@ class LongShoreMan(object):
         json.dump(open(self._get_container_config_filepath(), 'w'))
         subprocess.call_check(['mkenv', container_id])
 
-    def create_process(self, container_id, command, config)
+    def create_process(self, container_id, command, config):
 
         self._validate_existing_container_id(container_id)
         # open container config file
