@@ -64,10 +64,13 @@ class LongShoreMan(object):
     def _get_container_config_filepath(self, container_id):
         container_dir = self._get_container_dir(container_id)
         return os.path.join(container_dir, 'container.json')
-    def get_container_info(self, container_id):
+    def get_container_config(self, container_id):
         self._validate_existing_container_id(container_id)
         config = self._get_container_config_filepath()
         return json.load(open(config))
+    def get_container_info(self, container_id):
+        self._validate_existing_container_id(container_id)
+        raise NotImplementedError
     #def get_container_contents(self, container_id):
     def get_process_info(self, process_id):
         pass
@@ -100,7 +103,7 @@ class LongShoreMan(object):
     def _get_allocated_ports(self):
         ports = []
         for c in self.list_containers():
-            info = self.get_container_info(c)
+            config = self.get_container_config(c)
             ports.extend(info.get('ports', {}).values())
         return ports
 
