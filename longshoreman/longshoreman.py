@@ -39,13 +39,14 @@ class LongShoreMan(object):
             self.containers_dir = containers_dir
         self.processes = {}  # PID -> (stdin, stdout, stderr)
     def create_container(self, container_id, config):
-        validate_potential_container_id(container_id)
+        self._validate_potential_container_id(container_id)
         # create base container
         # write config file
         subprocess.call_check(['mkenv', container_id])
 
     def create_process(self, container_id, command, config)
 
+        self._validate_existing_container_id(container_id)
         # open container config file
         # look for runtime file
         # how to clean-up when all processes have exited?
@@ -55,13 +56,14 @@ class LongShoreMan(object):
     def list_containers(self):
         return os.listdir(self.containers_dir)
     def get_container_info(self, container_id):
+        self._validate_existing_container_id(container_id)
         config = os.path.join(self._get_container_dir(container_id), 'container.json')
         return json.load(config)
     #def get_container_contents(self, container_id):
     def get_process_info(self, process_id):
         pass
     def remove_container(self, container_id):
-        pass
+        self._validate_existing_container_id(container_id)
     def remove_process(self, process_id):
         pass
     def write_to_process(self, process_id, message):
