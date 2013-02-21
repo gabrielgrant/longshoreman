@@ -33,7 +33,7 @@ PROCESS_CONFIG_KEYS = (
 
 class LongShoreMan(object):
     def __init__(self, containers_dir=None):
-        if container_dir is None:
+        if containers_dir is None:
             self.containers_dir = DEFAULT_CONTAINERS_DIR
         else:
             self.containers_dir = containers_dir
