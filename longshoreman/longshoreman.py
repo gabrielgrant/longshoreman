@@ -9,6 +9,8 @@ import json
 import os
 import subprocess
 
+from .utils import get_free_port
+
 def _get_default_container_dir(env):
     """ tries $LSM_CONTAINER_DIR, fall back to $HOME/.lsm/containers/ """
     fallback = os.path.join(env.get('HOME'), '.lsm/containers/')
@@ -41,6 +43,9 @@ class LongShoreMan(object):
     def create_container(self, container_id, config):
         self._validate_potential_container_id(container_id)
         # create base container
+        # allocate ports
+        for p in config.get('ports', []):
+            config['ports'][p] = get_free_port(self._get_allocated_ports())
         # write config file
         subprocess.call_check(['mkenv', container_id])
 
@@ -88,5 +93,11 @@ class LongShoreMan(object):
         if container_id not in self.list_containers():
             raise ValueError(
                 'No container with ID %s exists' % container_id)
+    def _get_allocated_ports(self):
+        ports = []
+        for c in self.list_containers():
+            info = self.get_container_info(c)
+            ports.extend(info.get('ports', {}).values())
+        return ports
 
 # vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4
