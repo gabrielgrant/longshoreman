@@ -85,7 +85,7 @@ class LongShoreMan(object):
         return os.path.join(self.containers_dir, container_id)
     def _validate_container_id(self, container_id):
         # check that the name is valid
-        if not conatiner_id.isalnum():
+        if not container_id.isalnum():
             raise ValueError('container_id can only be alpha-numeric')
 
     def _validate_potential_container_id(self, container_id):
