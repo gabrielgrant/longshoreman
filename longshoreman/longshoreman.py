@@ -16,6 +16,18 @@ def _get_default_container_dir(env):
 
 DEFAULT_CONTAINERS_DIR = _get_default_container_dir(os.environ)
 
+COMMON_CONFIG_KEYS = (
+    'user',
+    'primary_group',
+    'secondary_groups',
+    'env',
+    'kill_timeout',
+)
+CONTAINER_CONFIG_KEYS = (
+    'ports',
+)
+PROCESS_CONFIG_KEYS = ()
+
 class LongShoreMan(object):
     def __init__(self, containers_dir=None):
         if container_dir is None:
