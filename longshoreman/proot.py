@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
 """
-create_proot.py
+proot.py
 
-replace this with a description of the code and write the code below this text.
+Interface to create and manage PRoots
 """
 
 import os
@@ -69,7 +69,15 @@ def create_proot(fakeroot='/tmp/fakeroot'):
         fakeroot_link_name = in_fakeroot(link_name)
         print 'linking', fakeroot_link_name, 'to', target
         os.symlink(target, fakeroot_link_name)
+    
+    # mounting happens at command execution time, so we're done
 
+def get_proot_command(
+    proot_filepath='./PRoot-2.3.1/src/proot',
+    fakeroot='/tmp/fakeroot',
+    command=None
+):
+    cmds = [proot_filepath]
     mount_dir_cmds = []
     for target in BIND_DIRS:
         mount_dir_cmds.append('-b')
@@ -77,6 +85,37 @@ def create_proot(fakeroot='/tmp/fakeroot'):
         #mount_dir_cmds.append('%s:%s' % (target, link_name))
         mount_dir_cmds.append(target)
 
-    print './PRoot-2.3.1/src/proot', ' '.join(mount_dir_cmds), '-r', fakeroot
+    cmds.extend(mount_dir_cmds)
+    cmds.extend(['-r', fakeroot])
+    if command:
+        cmds.append(command)
+    return cmds
 
+
+USAGE = """proot.py CONTAINER_DIR
+
+Creates a container template in the provided directory
+
+CONTAINER_DIR  a non-existent path
+"""
+
+def main(args):
+    if len(args) != 1:
+        print 'Exactly one argument required.\n'
+        print USAGE
+        return
+    if args[0] in ('-h', '--help'):
+        print USAGE
+        return
+    fakeroot = args[0]
+    if os.path.exists(fakeroot):
+        print 'The directory location is not empty:', fakeroot, '\n'
+        print USAGE
+        return
+    create_proot(fakeroot)
+    print ' '.join(get_proot_command(fakeroot))
+
+if __name__ == '__main__':
+    import sys
+    main(sys.argv[1:])
 # vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4
