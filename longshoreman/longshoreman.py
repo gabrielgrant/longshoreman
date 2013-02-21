@@ -26,7 +26,10 @@ COMMON_CONFIG_KEYS = (
 CONTAINER_CONFIG_KEYS = (
     'ports',
 )
-PROCESS_CONFIG_KEYS = ()
+PROCESS_CONFIG_KEYS = (
+    'cwd',
+)
+
 
 class LongShoreMan(object):
     def __init__(self, containers_dir=None):
