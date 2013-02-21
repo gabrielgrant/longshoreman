@@ -7,7 +7,8 @@ Longshoreman corrals containers.
 """
 import json
 import os
-import subprocess
+
+import gevent_subprocess as subprocess
 
 from .utils import get_free_port
 
