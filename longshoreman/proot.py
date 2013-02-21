@@ -5,7 +5,7 @@ proot.py
 
 Interface to create and manage PRoots
 """
-
+from distutils.spawn import find_executable
 import os
 
 BIND_DIRS = [
@@ -53,10 +53,15 @@ def create_proot(fakeroot='/tmp/fakeroot'):
     # mounting happens at command execution time, so we're done
 
 def get_proot_command(
-    proot_filepath='./PRoot-2.3.1/src/proot',
+    proot_filepath=None,
     fakeroot='/tmp/fakeroot',
     command=None
 ):
+    if proot_filepath is None:
+        proot_filepath = find_executable('proot')
+        if proot_filepath is None:
+            raise RuntimeError(
+                'no "proot" executable found. Is PRoot installed?\nSee http://proot.me/')
     cmds = [proot_filepath]
     mount_dir_cmds = []
     for target in BIND_DIRS:
